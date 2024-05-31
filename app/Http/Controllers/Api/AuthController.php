@@ -7,7 +7,7 @@ use App\Http\Requests\Api\UserLoginRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Traits\ApiResponses;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 
 class AuthController extends Controller
