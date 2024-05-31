@@ -7,6 +7,8 @@ use App\Http\Requests\Api\UserLoginRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Traits\ApiResponses;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class AuthController extends Controller
 {
@@ -25,8 +27,14 @@ class AuthController extends Controller
         return $this->ok(
             'Authenticated',
             [
-                'data' => $user->createToken('Api token for' . $user->email)->plainTextToken
+                'data' => $user->createToken('Api token for' . $user->email, ['*'], now()->addMonth())->plainTextToken
             ]
         );
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return $this->ok('');
     }
 }
