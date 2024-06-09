@@ -22,6 +22,5 @@ class Ticket extends Model
     public function scopeFilter(Builder $builder, QueryFilter $filters)
     {
         return $filters->apply($builder);
-
     }
 }
