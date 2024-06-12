@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateTicketRequest;
 use App\Http\Resources\Api\TicketResource;
 use App\Http\Controllers\Api\V1\ApiController;
 use App\Http\Filters\V1\TicketFilter;
+use App\Http\Requests\Api\V1\ReplaceTicketRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TicketController extends ApiController
@@ -27,9 +28,8 @@ class TicketController extends ApiController
     public function store(StoreTicketRequest $request)
     {
         try {
-            
-            $user = User::findOrFail($request->input('data.relationships.author.data.id'));
 
+            $user = User::findOrFail($request->input('data.relationships.author.data.id'));
         } catch (ModelNotFoundException $exception) {
             return $this->ok('User not found.', [
                 'error' => 'The provided user id does not exists'
@@ -66,11 +66,33 @@ class TicketController extends ApiController
     }
 
     /**
+     * replace the specified resource in storage.
+     */
+    public function replace(ReplaceTicketRequest $request, $ticket_id)
+    {
+        try {
+            $ticket = Ticket::FindOrFail($ticket_id);
+            $model = [
+                'title' => $request->input('data.attributes.title'),
+                'description' => $request->input('data.attributes.description'),
+                'status' => $request->input('data.attributes.status'),
+                'user_id' => $request->input('data.relationships.author.data.id'),
+            ];
+
+            $ticket->update($model);
+
+            return new TicketResource($ticket);
+        } catch (ModelNotFoundException $exception) {
+            return $this->error('Ticket cannot be found.', 404);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy($ticket_id)
     {
-        
+
         try {
             $ticket = Ticket::findOrFail($ticket_id);
             $ticket->delete();
@@ -78,6 +100,5 @@ class TicketController extends ApiController
         } catch (ModelNotFoundException $exception) {
             return $this->error('Ticket cannot be found.', 404);
         }
-        
     }
 }

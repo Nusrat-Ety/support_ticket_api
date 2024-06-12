@@ -19,10 +19,17 @@ use Illuminate\Support\Facades\Route;
 
 // middleware used for restricting unauthenticated users from viewing the ticket lists
 
-Route::middleware('auth:sanctum')->apiResource('tickets', TicketController::class);
-Route::middleware('auth:sanctum')->apiResource('authors', AuthorController::class);
-Route::middleware('auth:sanctum')->apiResource('authors.tickets', AuthorTicketsController::class);
+Route::middleware('auth:sanctum')->group(function() {
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::apiResource('tickets', TicketController::class)->except('update');
+    Route::put('tickets/{ticket}', [TicketController::class, 'replace']);
+    Route::apiResource('authors', AuthorController::class);
+    Route::apiResource('authors.tickets', AuthorTicketsController::class)->except('update');
+    Route::put('authors/{author}/tickets/{ticket}', [AuthorTicketsController::class, 'replace']);
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
 });
+
