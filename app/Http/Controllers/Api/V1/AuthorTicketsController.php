@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Filters\V1\TicketFilter;
 use App\Http\Requests\Api\V1\ReplaceTicketRequest;
 use App\Http\Requests\Api\V1\StoreTicketRequest;
+use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Resources\Api\TicketResource;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -59,14 +60,27 @@ class AuthorTicketsController extends ApiController
             $ticket = Ticket::FindOrFail($ticket_id);
 
             if ($ticket->user_id == $author_id) {
-                $model = [
-                    'title' => $request->input('data.attributes.title'),
-                    'description' => $request->input('data.attributes.description'),
-                    'status' => $request->input('data.attributes.status'),
-                    'user_id' => $request->input('data.relationships.author.data.id'),
-                ];
+                $ticket->update($request->mappedAttribute());
+                return new TicketResource($ticket);
+            }
+            // todo:if ticket not belongs to user
 
-                $ticket->update($model);
+        } catch (ModelNotFoundException $exception) {
+            return $this->error('Ticket cannot be found.', 404);
+        }
+    }
+
+
+    /**
+     * update the specified resource in storage.
+     */
+    public function update(UpdateTicketRequest $request, $author_id, $ticket_id)
+    {
+        try {
+            $ticket = Ticket::FindOrFail($ticket_id);
+
+            if ($ticket->user_id == $author_id) {
+                $ticket->update($request->mappedAttribute());
                 return new TicketResource($ticket);
             }
             // todo:if ticket not belongs to user
