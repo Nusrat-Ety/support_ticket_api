@@ -13,6 +13,7 @@ class BaseTicketRequest extends FormRequest
             'data.attributes.title' => 'title',
             'data.attributes.description' => 'description',
             'data.attributes.status' => 'status',
+            'data.relationships.author.data.id' => 'user_id',
             'data.attributes.createdAt' => 'created_at',
             'data.attributes.updatedAt' => 'updated_at'
         ];
@@ -24,7 +25,7 @@ class BaseTicketRequest extends FormRequest
                 $attributesToUpdate[$attribute] = $this->input($key);
             }
         }
-
+        
         return $attributesToUpdate;
     }
 

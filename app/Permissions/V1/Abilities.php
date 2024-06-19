@@ -14,6 +14,7 @@ final class Abilities
     public const DeleteTicket = 'ticket:delete';
 
     // Ticket-specific own abilities
+    public const CreateOwnTicket = 'ticket:own:create';
     public const UpdateOwnTicket = 'ticket:own:update';
     public const DeleteOwnTicket = 'ticket:own:delete';
 
@@ -31,6 +32,8 @@ final class Abilities
      */
     public static function getAbilities(User $user)
     {
+        // Don't assign '*'
+
         if ($user->is_manager) {
 
             // Return full set of abilities for managers
@@ -49,7 +52,7 @@ final class Abilities
             
             // Return limited abilities for regular users
             return [
-                self::CreateTicket,
+                self::CreateOwnTicket,
                 self::UpdateOwnTicket,
                 self::DeleteOwnTicket,
             ];
