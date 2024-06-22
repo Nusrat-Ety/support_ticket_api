@@ -32,8 +32,6 @@ final class Abilities
      */
     public static function getAbilities(User $user)
     {
-        // Don't assign '*'
-
         if ($user->is_manager) {
 
             // Return full set of abilities for managers
