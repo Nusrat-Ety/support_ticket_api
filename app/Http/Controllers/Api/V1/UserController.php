@@ -14,8 +14,19 @@ use App\Http\Requests\Api\V1\ReplaceUserRequest;
 class UserController extends ApiController
 {
     protected $policyClass = UserPolicy::class;
+
     /**
-     * Display a listing of the resource.
+     * Get All Users
+     * 
+     * Only managers can access all of the user data
+     * 
+     * @queryParam sort string data field(s) to sort by. Separate multiple fields with commas. Denotes descending sorts with a minus sign. Example: sort=name, -createdAt
+     * 
+     * @queryParam include relationships related to users. Example: tickets
+     * 
+     * @queryParam filter[column_name] Filter by string data field of the user. Example: Filter by name. Wildcards are supported. Example: filter[name]=*test*
+     * 
+     * @group Managing User
      */
     public function index(AuthorFilter $filter)
     {
@@ -23,7 +34,25 @@ class UserController extends ApiController
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a user
+     * 
+     * Only managers can create a user
+     * 
+     * @response 200 {
+     * "data": {
+            "type": "User",
+            "id": 14,
+            "attributes": {
+                "name": "test",
+                "email": "test@gmail.com",
+                "isManager": false
+            },
+            "links": {
+                "self": "http://127.0.0.1:8000/api/v1/authors/14"
+            }
+     *}
+     * 
+     * @group Managing User
      */
     public function store(StoreUserRequest $request)
     {
@@ -34,7 +63,12 @@ class UserController extends ApiController
     }
 
     /**
-     * Display the specified resource.
+     * Show a user
+     * 
+     * Displays an individual user according to provided id.
+     * 
+     * @group Managing User
+     * 
      */
     public function show(User $user)
     {
@@ -45,7 +79,27 @@ class UserController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a user
+     * 
+     * Updates an individual user according to provided id. Only managers can update an user information.
+     * 
+     * @response 200 {
+     * "data": {
+                "type": "User",
+                "id": 14,
+                "attributes": {
+                    "name": "test 2",
+                    "email": "test@email.com",
+                    "isManager": false
+                },
+                "links": {
+                    "self": "http://127.0.0.1:8000/api/v1/authors/14"
+                }
+            }
+     * }
+     * 
+     * @group Managing User
+     * 
      */
     public function update(UpdateUserRequest $request, User $user)
     {
@@ -56,6 +110,30 @@ class UserController extends ApiController
         return $this->notAuthorized('You are not authorized to update the resource.');
     }
 
+    /**
+     * Replace a user
+     * 
+     * Replace an individual user according to provided id. Only managers can replace an user information.
+     * 
+     * @response 200 {
+     * 
+     * "data": {
+                "type": "User",
+                "id": 14,
+                "attributes": {
+                    "name": "test 3",
+                    "email": "test@yahoo.com",
+                    "isManager": true
+                },
+                "links": {
+                    "self": "http://127.0.0.1:8000/api/v1/authors/14"
+                }
+            }
+     * }
+     * 
+     * @group Managing User
+     * 
+     */
     public function replace(ReplaceUserRequest $request, User $user)
     {
         if ($this->isAble('replace', $user)) {
@@ -66,7 +144,18 @@ class UserController extends ApiController
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a user
+     * 
+     * Removes an individual user according to provided id. Only managers can remove an user.
+     * 
+     * @group Managing User
+     * 
+     * @response 200 {
+     * "data": [],
+            "message": "User deleted successfully.",
+            "status": 200
+     * }
+     * 
      */
     public function destroy(User $user)
     {

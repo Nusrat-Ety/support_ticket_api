@@ -10,14 +10,22 @@ use App\Http\Controllers\Api\V1\ApiController;
 use App\Http\Requests\Api\V1\StoreTicketRequest;
 use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Requests\Api\V1\ReplaceTicketRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TicketController extends ApiController
 {
     protected $policyClass = TicketPolicy::class;
 
     /**
-     * Display a listing of the resource.
+     * Get All Tickets
+     * 
+     * @queryParam sort string data field(s) to sort by. Separate multiple fields with commas. Denotes descending sorts with a minus sign. Example: sort=title, -createdAt
+     * 
+     * @queryParam include relationships related to tickets. Example: Author
+     * 
+     * @queryParam filter[column_name] Filter by string data field of the tickets. Example: filter[status]=A,C,H,X. 
+     * Filter by title. Wildcards are supported. Example: filter[title]=*val*
+     * 
+     * @group Managing Tickets
      */
     public function index(TicketFilter $filters)
     {
@@ -25,7 +33,40 @@ class TicketController extends ApiController
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a Ticket
+     * 
+     * Creates a new ticket. Users can only create tickets for themselves. Managers can create tickets for any user.
+     * 
+     * @response 200 {
+     * "data": {
+                "type": "Tickets",
+                "id": 1,
+                "attributes": {
+                    "title": "test ticket",
+                    "status": "A",
+                    "description": "test ticket description",
+                    "createdAt": "2024-06-23T16:12:12.000000Z",
+                    "updatedAt": "2024-06-23T16:12:12.000000Z"
+                },
+                "relationships": {
+                    "author": {
+                        "data": {
+                            "type": "user",
+                            "id": 14
+                        },
+                        "links": {
+                            "self": "http://127.0.0.1:8000/api/v1/authors/14"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "http://127.0.0.1:8000/api/v1/tickets/106"
+                }
+            }
+     * }
+     * 
+     * @group Managing Tickets
+     * 
      */
     public function store(StoreTicketRequest $request)
     {
@@ -36,7 +77,12 @@ class TicketController extends ApiController
     }
 
     /**
-     * Display the specified resource.
+     * Show a ticket
+     * 
+     * Displays an individual ticket to user according to provided id.
+     * 
+     * @group Managing Tickets
+     * 
      */
     public function show(Ticket $ticket)
     {
@@ -47,7 +93,41 @@ class TicketController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a ticket
+     * 
+     * Update a ticket. User can update their own tickets. Managers can update any tickets.
+     * 
+     * @group Managing Tickets
+     * 
+     * @response 200 {
+     * 
+     *  "data": {
+                "type": "Tickets",
+                "id": 106,
+                "attributes": {
+                    "title": "Test ticket update",
+                    "status": "A",
+                    "description": "test ticket description",
+                    "createdAt": "2024-06-23T16:12:12.000000Z",
+                    "updatedAt": "2024-06-23T16:13:51.000000Z"
+                },
+                "relationships": {
+                    "author": {
+                        "data": {
+                            "type": "user",
+                            "id": 14
+                        },
+                        "links": {
+                            "self": "http://127.0.0.1:8000/api/v1/authors/14"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "http://127.0.0.1:8000/api/v1/tickets/106"
+                }
+            }
+     * }
+     * 
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
@@ -59,7 +139,41 @@ class TicketController extends ApiController
     }
 
     /**
-     * replace the specified resource in storage.
+     * Replace a ticket
+     * 
+     * Replace a ticket. User can replace their own tickets. Managers can replace any tickets.
+     * 
+     * @group Managing Tickets
+     * 
+     * @response 200 {
+     * 
+     * "data": {
+                "type": "Tickets",
+                "id": 106,
+                "attributes": {
+                    "title": "Test ticket replace",
+                    "status": "C",
+                    "description": "test ticket description",
+                    "createdAt": "2024-06-23T16:12:12.000000Z",
+                    "updatedAt": "2024-06-23T16:13:51.000000Z"
+                },
+                "relationships": {
+                    "author": {
+                        "data": {
+                            "type": "user",
+                            "id": 14
+                        },
+                        "links": {
+                            "self": "http://127.0.0.1:8000/api/v1/authors/14"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "http://127.0.0.1:8000/api/v1/tickets/106"
+                }
+            }
+     * }
+     * 
      */
     public function replace(ReplaceTicketRequest $request, Ticket $ticket)
     {
@@ -71,8 +185,19 @@ class TicketController extends ApiController
     }
 
     /**
-     * Remove the specified resource from storage.
-     */
+     * Delete a ticket
+     * 
+     * Delete a ticket. User can delete their own tickets. Managers can delete any tickets.
+     * 
+     * @group Managing Tickets
+     * 
+     * @response 200 
+     * {
+        "data": [],
+        "message": "Ticket deleted successfully.",
+        "status": 200
+    * }
+    */
     public function destroy(Ticket $ticket)
     {
         if ($this->isAble('delete', $ticket)) {

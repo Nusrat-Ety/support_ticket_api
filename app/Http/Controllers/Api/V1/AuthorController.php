@@ -11,9 +11,14 @@ use App\Http\Requests\Api\V1\UpdateUserRequest;
 
 class AuthorController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
+     /**
+     * Get authors.
+     * 
+     * Retrieves all users that created a ticket.
+     * 
+     * @group Authors
      */
+
     public function index(AuthorFilter $filter)
     {
        return UserResource::collection(
@@ -26,15 +31,11 @@ class AuthorController extends ApiController
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUserRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Show an author.
+     * 
+     * Retrieves an author according to id.
+     * 
+     * @group Authors
      */
     public function show(User $author)
     {

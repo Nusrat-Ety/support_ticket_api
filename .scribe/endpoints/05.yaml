@@ -1,0 +1,725 @@
+name: 'Managing Tickets by Authors'
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/authors/{author_id}/tickets'
+    metadata:
+      groupName: 'Managing Tickets by Authors'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Retrieves all tickets created by a specific user.'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      author_id:
+        name: author_id
+        description: "the author's id."
+        required: true
+        example: 15
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      author_id: 15
+    queryParameters:
+      sort:
+        name: sort
+        description: 'data field(s) to sort by. Separate multiple fields with commas. Denotes descending sorts with a minus sign.'
+        required: false
+        example: 'sort=title, -createdAt'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      include:
+        name: include
+        description: 'relationships related to tickets.'
+        required: false
+        example: Author
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      'filter[column_name]':
+        name: 'filter[column_name]'
+        description: 'Filter by string data field of the tickets. Example: Filter by name. Wildcards are supported.'
+        required: false
+        example: 'filter[name]=*val*'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanQueryParameters:
+      sort: 'sort=title, -createdAt'
+      include: Author
+      'filter[column_name]': 'filter[name]=*val*'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+
+           "data": [
+          {
+          "type": "Tickets",
+          "id": 106,
+          "attributes": {
+          "title": "Test ticket update",
+          "status": "A",
+          "createdAt": "2024-06-23T16:12:12.000000Z",
+          "updatedAt": "2024-06-23T16:13:51.000000Z"
+          },
+          "relationships": {
+          "author": {
+          "data": {
+          "type": "user",
+          "id": 14
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/authors/14"
+          }
+          }
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/tickets/106"
+          }
+          }
+          ],
+          "links": {
+          "first": "http://127.0.0.1:8000/api/v1/authors/14/tickets?page=1",
+          "last": "http://127.0.0.1:8000/api/v1/authors/14/tickets?page=1",
+          "prev": null,
+          "next": null
+          },
+          "meta": {
+          "current_page": 1,
+          "from": 1,
+          "last_page": 1,
+          "links": [
+          {
+          "url": null,
+          "label": "&laquo; Previous",
+          "active": false
+          },
+          {
+          "url": "http://127.0.0.1:8000/api/v1/authors/14/tickets?page=1",
+          "label": "1",
+          "active": true
+          },
+          {
+          "url": null,
+          "label": "Next &raquo;",
+          "active": false
+          }
+          ],
+          "path": "http://127.0.0.1:8000/api/v1/authors/14/tickets",
+          "per_page": 15,
+          "to": 1,
+          "total": 1
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 11|cSQ2JIvboDSRkvoeob4syWCV0Yk2VjWZPgQ0B2d1caf62b90'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/authors/{author_id}/tickets'
+    metadata:
+      groupName: 'Managing Tickets by Authors'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create a ticket'
+      description: 'Creates a ticket for the specific user.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      author_id:
+        name: author_id
+        description: "The author's id."
+        required: true
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      author_id: 3
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      data:
+        name: data
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes:
+        name: data.attributes
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.title:
+        name: data.attributes.title
+        description: 'The tickets title.'
+        required: true
+        example: tempore
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.description:
+        name: data.attributes.description
+        description: 'The tickets description.'
+        required: true
+        example: 'Vero qui eligendi et exercitationem aliquam.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.status:
+        name: data.attributes.status
+        description: 'Status of the ticket. Such as Accept (A), Hold (H), Cancel (X), Completed (C).'
+        required: true
+        example: C
+        type: string
+        enumValues:
+          - A
+          - H
+          - C
+          - X
+        exampleWasSpecified: false
+        custom: []
+      author:
+        name: author
+        description: 'The author assigned to the ticket.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      data:
+        attributes:
+          title: tempore
+          description: 'Vero qui eligendi et exercitationem aliquam.'
+          status: C
+      author: 16
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "data": {
+          "type": "Tickets",
+          "id": 107,
+          "attributes": {
+          "title": "Store ticket",
+          "status": "X",
+          "description": "this is storing ticket.",
+          "createdAt": "2024-06-23T16:37:21.000000Z",
+          "updatedAt": "2024-06-23T16:37:21.000000Z"
+          },
+          "relationships": {
+          "author": {
+          "data": {
+          "type": "user",
+          "id": "14"
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/authors/14"
+          }
+          }
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/tickets/107"
+          }
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 11|cSQ2JIvboDSRkvoeob4syWCV0Yk2VjWZPgQ0B2d1caf62b90'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/authors/{author_id}/tickets/{id}'
+    metadata:
+      groupName: 'Managing Tickets by Authors'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Delete an author's ticket"
+      description: "Deletes an author's ticket."
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      author_id:
+        name: author_id
+        description: "The author's id."
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the ticket.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      ticket_id:
+        name: ticket_id
+        description: "The ticket's id."
+        required: true
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      author_id: 4
+      id: 1
+      ticket_id: 3
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+
+          "data": [],
+          "message": "Ticket deleted successfully.",
+          "status": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 11|cSQ2JIvboDSRkvoeob4syWCV0Yk2VjWZPgQ0B2d1caf62b90'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/authors/{author_id}/tickets/{ticket_id}'
+    metadata:
+      groupName: 'Managing Tickets by Authors'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Replace an author's ticket"
+      description: "Replaces an author's ticket."
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      author_id:
+        name: author_id
+        description: "The author's id."
+        required: true
+        example: 6
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      ticket_id:
+        name: ticket_id
+        description: "The ticket's id."
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      author_id: 6
+      ticket_id: 20
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      data:
+        name: data
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes:
+        name: data.attributes
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.title:
+        name: data.attributes.title
+        description: ''
+        required: true
+        example: quia
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.description:
+        name: data.attributes.description
+        description: ''
+        required: true
+        example: 'Sit iure ea hic ab blanditiis eveniet.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.status:
+        name: data.attributes.status
+        description: ''
+        required: true
+        example: A
+        type: string
+        enumValues:
+          - A
+          - H
+          - C
+          - X
+        exampleWasSpecified: false
+        custom: []
+      data.relationships:
+        name: data.relationships
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.relationships.author:
+        name: data.relationships.author
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.relationships.author.data:
+        name: data.relationships.author.data
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.relationships.author.data.id:
+        name: data.relationships.author.data.id
+        description: ''
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      data:
+        attributes:
+          title: quia
+          description: 'Sit iure ea hic ab blanditiis eveniet.'
+          status: A
+        relationships:
+          author:
+            data:
+              id: 20
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+
+          "data": {
+          "type": "Tickets",
+          "id": 11,
+          "attributes": {
+          "title": "replace again ticket",
+          "status": "X",
+          "description": "this is replace again ticket.",
+          "createdAt": "2024-06-16T15:57:28.000000Z",
+          "updatedAt": "2024-06-23T16:31:38.000000Z"
+          },
+          "relationships": {
+          "author": {
+          "data": {
+          "type": "user",
+          "id": 10
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/authors/10"
+          }
+          }
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/tickets/11"
+          }
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 11|cSQ2JIvboDSRkvoeob4syWCV0Yk2VjWZPgQ0B2d1caf62b90'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/authors/{author_id}/tickets/{ticket_id}'
+    metadata:
+      groupName: 'Managing Tickets by Authors'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Update an author's ticket"
+      description: "Updates an author's ticket."
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      author_id:
+        name: author_id
+        description: "The author's id."
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      ticket_id:
+        name: ticket_id
+        description: "The ticket's id."
+        required: true
+        example: 9
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      author_id: 20
+      ticket_id: 9
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      data.attributes:
+        name: data.attributes
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data:
+        name: data
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.title:
+        name: data.attributes.title
+        description: ''
+        required: false
+        example: magnam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.description:
+        name: data.attributes.description
+        description: ''
+        required: false
+        example: 'Earum veniam ut earum maxime et et autem.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.attributes.status:
+        name: data.attributes.status
+        description: ''
+        required: false
+        example: H
+        type: string
+        enumValues:
+          - A
+          - H
+          - C
+          - X
+        exampleWasSpecified: false
+        custom: []
+      data.relationships.author.data:
+        name: data.relationships.author.data
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.relationships.author:
+        name: data.relationships.author
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.relationships:
+        name: data.relationships
+        description: ''
+        required: false
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      data.relationships.author.data.id:
+        name: data.relationships.author.data.id
+        description: ''
+        required: false
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      data:
+        attributes:
+          title: magnam
+          description: 'Earum veniam ut earum maxime et et autem.'
+          status: H
+        relationships:
+          author:
+            data:
+              id: 4
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+
+          "data": {
+          "type": "Tickets",
+          "id": 11,
+          "attributes": {
+          "title": "update user request",
+          "status": "C",
+          "description": "this is update again ticket.",
+          "createdAt": "2024-06-16T15:57:28.000000Z",
+          "updatedAt": "2024-06-23T16:33:36.000000Z"
+          },
+          "relationships": {
+          "author": {
+          "data": {
+          "type": "user",
+          "id": 10
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/authors/10"
+          }
+          }
+          },
+          "links": {
+          "self": "http://127.0.0.1:8000/api/v1/tickets/11"
+          }
+          }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 11|cSQ2JIvboDSRkvoeob4syWCV0Yk2VjWZPgQ0B2d1caf62b90'
+    controller: null
+    method: null
+    route: null
+    custom: []

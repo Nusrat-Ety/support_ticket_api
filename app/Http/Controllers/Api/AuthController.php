@@ -15,6 +15,24 @@ class AuthController extends Controller
 {
     use ApiResponses;
 
+    /**
+     * Login
+     * 
+     * Authenticates the user and returns the user's API token
+     * 
+     * @unauthenticated
+     * 
+     * @group Authentication
+     * 
+     * @response 200 {
+        "data": {
+                "data": "{YOUR_AUTH_TOKEN}"
+            },
+            "message": "Authenticated",
+            "status": 200
+        }
+     */
+
     public function login(UserLoginRequest $request)
     {
         $request->validated($request->all());
@@ -27,12 +45,29 @@ class AuthController extends Controller
         return $this->ok(
             'Authenticated',
             [
-                'data' => $user->createToken('Api token for' . $user->email, 
-                Abilities::getAbilities($user), 
-                now()->addMonth())->plainTextToken
+                'data' => $user->createToken(
+                    'Api token for' . $user->email,
+                    Abilities::getAbilities($user),
+                    now()->addMonth()
+                )->plainTextToken
             ]
         );
     }
+
+    /**
+     * Logout
+     * 
+     * Signs out the user and destroys the API token
+     * 
+     * @group Authentication
+     * 
+     * @response 200 {
+            "data": [],
+            "message": "",
+            "status": 200
+     * }
+     * 
+     */
 
     public function logout(Request $request)
     {
